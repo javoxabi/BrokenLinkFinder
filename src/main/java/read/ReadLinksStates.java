@@ -1,6 +1,7 @@
 package read;
 
-public enum ReadLinksStates {
+public enum ReadLinksStates
+{
     LINKS,
     FILES,
     OUT,

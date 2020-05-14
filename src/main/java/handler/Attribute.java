@@ -1,6 +1,7 @@
 package handler;
 
-public enum Attribute {
+public enum Attribute
+{
     SRC,
     HREF
 }

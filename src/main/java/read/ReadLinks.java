@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ReadLinks {
-    public ReadLinks(String[] args) {
+    public ReadLinks(String[] args)
+    {
         ReadLinksStates state = ReadLinksStates.ERROR;
+        boolean isOutFile = false;
         for (String argument : args)
         {
             if (changeState(argument) != ReadLinksStates.ERROR)
@@ -30,6 +32,7 @@ public class ReadLinks {
                 case OUT:
                     {
                     this.outputFile = argument;
+                    isOutFile = true;
                     continue;
                 }
                 case ERROR:
@@ -38,8 +41,7 @@ public class ReadLinks {
                 }
             }
         }
-        assert outputFile != null;
-        if (outputFile.length() == 0)
+        if (!isOutFile)
         {
             throw new IllegalArgumentException("The output file is required");
         }
@@ -65,7 +67,8 @@ public class ReadLinks {
 
     private ReadLinksStates changeState(String element)
     {
-        switch (element) {
+        switch (element)
+        {
             case "--files":
                 return ReadLinksStates.FILES;
             case "--links":

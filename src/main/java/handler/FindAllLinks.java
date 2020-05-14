@@ -13,14 +13,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 
-public class FindAllLinks {
-    public FindAllLinks() {
-    }
-
-    public List<String> getLinks(String htmlFileName, ReadLinksStates state) throws IOException {
+public class FindAllLinks
+{
+    public List<String> getLinks(String htmlFileName, ReadLinksStates state) throws IOException
+    {
         List<String> links = new ArrayList<>();
 
-        switch (state) {
+        switch (state)
+        {
             case FILES:
                 openDocument(htmlFileName);
                 break;
@@ -32,8 +32,10 @@ public class FindAllLinks {
         }
 
         Map<Attribute, Elements> mapTags = getTags();
-        for (Map.Entry<Attribute, Elements> entry : mapTags.entrySet()) {
-            for (Element tag : entry.getValue()) {
+        for (Map.Entry<Attribute, Elements> entry : mapTags.entrySet())
+        {
+            for (Element tag : entry.getValue())
+            {
                 links.add(tag.attr("abs:" + ATTRIBUTES.get(entry.getKey())));
             }
         }
@@ -43,15 +45,19 @@ public class FindAllLinks {
 
     private Document document;
 
-    private final Map<Attribute, String> ATTRIBUTES = new LinkedHashMap<>() {{
-        put(Attribute.HREF, "href");
-        put(Attribute.SRC, "src");
-    }};
+    private final Map<Attribute, String> ATTRIBUTES = new LinkedHashMap<>()
+    {
+        {
+            put(Attribute.HREF, "href");
+            put(Attribute.SRC, "src");
+        }
+    };
 
-    private void connect(String link) throws IOException {
+    private void connect(String link) throws IOException
+    {
         FileInputStream fis;
         Properties property = new Properties();
-        fis = new FileInputStream("src/main/java/resources/config.properties");
+        fis = new FileInputStream("resources/config.properties");
         property.load(fis);
         int connectionTimeout = Integer.parseInt(property.getProperty("connectionTimeout"));
         Connection connection = Jsoup.connect(link)
@@ -60,13 +66,15 @@ public class FindAllLinks {
         document = connection.get();
     }
 
-    private void openDocument(String link) throws IOException {
+    private void openDocument(String link) throws IOException
+    {
         document = Jsoup.parse(new File(link), null);
     }
 
     private Map<Attribute, Elements> getTags() {
         Map<Attribute, Elements> mapTags = new LinkedHashMap<>();
-        for (Map.Entry<Attribute, String> attribute : ATTRIBUTES.entrySet()) {
+        for (Map.Entry<Attribute, String> attribute : ATTRIBUTES.entrySet())
+        {
             mapTags.put(attribute.getKey(), document.getElementsByAttribute(attribute.getValue()));
         }
 
