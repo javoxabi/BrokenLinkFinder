@@ -1,11 +1,11 @@
 package handler;
 
+import commandLineCommands.States;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import read.ReadLinksStates;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,9 +13,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 
-public class FindAllLinks
-{
-    public List<String> getLinks(String htmlFileName, ReadLinksStates state) throws IOException
+public class AllLinks {
+    public List<String> getLinks(String htmlFileName, States state) throws IOException
     {
         List<String> links = new ArrayList<>();
 
@@ -31,8 +30,8 @@ public class FindAllLinks
                 throw new FileNotFoundException();
         }
 
-        Map<Attribute, Elements> mapTags = getTags();
-        for (Map.Entry<Attribute, Elements> entry : mapTags.entrySet())
+        Map<String, Elements> mapTags = getTags();
+        for (Map.Entry<String, Elements> entry : mapTags.entrySet())
         {
             for (Element tag : entry.getValue())
             {
@@ -45,11 +44,14 @@ public class FindAllLinks
 
     private Document document;
 
-    private final Map<Attribute, String> ATTRIBUTES = new LinkedHashMap<>()
+    public static final String HREF = "HREF";
+    public static final String SRC = "SRC";
+
+    private final Map<String, String> ATTRIBUTES = new LinkedHashMap<>()
     {
         {
-            put(Attribute.HREF, "href");
-            put(Attribute.SRC, "src");
+            put(HREF, "href");
+            put(SRC, "src");
         }
     };
 
@@ -59,10 +61,8 @@ public class FindAllLinks
         Properties property = new Properties();
         fis = new FileInputStream("resources/config.properties");
         property.load(fis);
-        int connectionTimeout = Integer.parseInt(property.getProperty("connectionTimeout"));
-        Connection connection = Jsoup.connect(link)
-                .timeout(connectionTimeout)
-                .userAgent(property.getProperty("userAgent"));
+        int connectionTimeout = Integer.parseInt(property.getProperty("connectTimeout"));
+        Connection connection = Jsoup.connect(link).timeout(connectionTimeout);
         document = connection.get();
     }
 
@@ -71,9 +71,9 @@ public class FindAllLinks
         document = Jsoup.parse(new File(link), null);
     }
 
-    private Map<Attribute, Elements> getTags() {
-        Map<Attribute, Elements> mapTags = new LinkedHashMap<>();
-        for (Map.Entry<Attribute, String> attribute : ATTRIBUTES.entrySet())
+    private Map<String, Elements> getTags() {
+        Map<String, Elements> mapTags = new LinkedHashMap<>();
+        for (Map.Entry<String, String> attribute : ATTRIBUTES.entrySet())
         {
             mapTags.put(attribute.getKey(), document.getElementsByAttribute(attribute.getValue()));
         }

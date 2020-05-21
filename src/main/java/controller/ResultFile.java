@@ -1,8 +1,9 @@
 package controller;
 
-import handler.FindAllLinks;
-import handler.FindBrokenLinks;
-import read.ReadLinksStates;
+import model.LinkModel;
+import commandLineCommands.States;
+import handler.AllLinks;
+import handler.BrokenLinks;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,23 +18,18 @@ public class ResultFile
         this.filename = filename;
     }
 
-    public void append(List<Response> brokenLinks)
-    {
+    public void append(List<LinkModel> brokenLinks) throws FileNotFoundException {
         try (PrintWriter writer = new PrintWriter(new File(filename)))
         {
             if (filename.isEmpty())
             {
                 return;
             }
-            for (Response brokenLink : brokenLinks)
-            {
-                String builder = brokenLink.getUrl() +
-                        ';' +
-                        brokenLink.getStatusCode() +
-                        ';' +
-                        brokenLink.getStatusMessage() +
-                        '\n';
-                writer.write(builder);
+
+            writer.write(String.format("%-5s%-50s%-15s%-50s\n", "№", "Link", "Status Code", "Status Message"));
+            for (int i = 0; i < brokenLinks.size(); i++) {
+                LinkModel brokenLink = brokenLinks.get(i);
+                writer.write(String.format("%-5s%-50s%-15s%-50s\n", i+1, brokenLink.getUrl(), brokenLink.getStatusCode(), brokenLink.getStatusMessage()));
                 writer.flush();
             }
         } catch (FileNotFoundException e)
@@ -42,21 +38,19 @@ public class ResultFile
         }
     }
 
-    public static List<Response> getBrokenLinks(List<String> pages, ReadLinksStates state) throws Exception
+    public static List<LinkModel> getBrokenLinks(List<String> pages, States state) throws Exception
     {
-        List<Response> brokenLinks = new ArrayList<>();
-        FindAllLinks linksFinder = new FindAllLinks();
-        for (String page : pages)
-        {
+        List<LinkModel> brokenLinks = new ArrayList<>();
+        AllLinks linksFinder = new AllLinks();
+        for (String page : pages) {
             List<String> links = linksFinder.getLinks(page, state);
-            FindBrokenLinks brokenLinksFinder = new FindBrokenLinks(links);
+            BrokenLinks brokenLinksFinder = new BrokenLinks(links);
             brokenLinks.addAll(brokenLinksFinder.getBrokenLinks());
         }
         return brokenLinks;
     }
 
-    public static void printBrokenLinks(List<Response> brokenLinks, String outputFile)
-    {
+    public static void printBrokenLinks(List<LinkModel> brokenLinks, String outputFile) throws FileNotFoundException {
         ResultFile writer = new ResultFile(outputFile);
         writer.append(brokenLinks);
     }
