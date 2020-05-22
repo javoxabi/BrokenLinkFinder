@@ -43,7 +43,7 @@ public class RequestHttp implements Callable<LinkModel> {
             return new MutablePair<>(response.statusCode(), response.statusMessage());
         } catch (SocketTimeoutException exception)
         {
-            return new MutablePair<>(522, "Connection time out!");
+            return new MutablePair<>(522, "Connection time out");
         } catch (Exception exception)
         {
             return new MutablePair<>(400, "Bad request");

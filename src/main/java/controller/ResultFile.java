@@ -18,7 +18,7 @@ public class ResultFile
         this.filename = filename;
     }
 
-    public void append(List<LinkModel> brokenLinks) throws FileNotFoundException {
+    public void append(List<LinkModel> brokenLinks) {
         try (PrintWriter writer = new PrintWriter(new File(filename)))
         {
             if (filename.isEmpty())
@@ -50,7 +50,7 @@ public class ResultFile
         return brokenLinks;
     }
 
-    public static void printBrokenLinks(List<LinkModel> brokenLinks, String outputFile) throws FileNotFoundException {
+    public static void printBrokenLinks(List<LinkModel> brokenLinks, String outputFile) {
         ResultFile writer = new ResultFile(outputFile);
         writer.append(brokenLinks);
     }
