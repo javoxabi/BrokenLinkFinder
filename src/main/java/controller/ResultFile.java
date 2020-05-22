@@ -44,8 +44,8 @@ public class ResultFile
         AllLinks linksFinder = new AllLinks();
         for (String page : pages) {
             List<String> links = linksFinder.getLinks(page, state);
-            BrokenLinks brokenLinksFinder = new BrokenLinks(links);
-            brokenLinks.addAll(brokenLinksFinder.getBrokenLinks());
+            BrokenLinks brokenLinksFind = new BrokenLinks(links);
+            brokenLinks.addAll(brokenLinksFind.getBrokenLinks());
         }
         return brokenLinks;
     }

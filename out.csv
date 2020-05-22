@@ -1,0 +1,10 @@
+№    Link                                              Status Code    Status Message                                    
+1    http://52.136.215.164/links/locked.php            522            Connection time out                               
+2    http://52.136.215.164/links/movedper.php          522            Connection time out                               
+3    http://52.136.215.164/links/404not404found404.php 522            Connection time out                               
+4    http://52.136.215.164/links/found302.php          522            Connection time out                               
+5    http://52.136.215.164/links/return500bad.php      522            Connection time out                               
+6    http://52.136.215.164/links/un503availible.php    522            Connection time out                               
+7    https://httpstat.us/404                           404            Not Found                                         
+8    https://httpstat.us/400                           400            Bad Request                                       
+9    https://httpstat.us/503                           503            Service Unavailable                               
